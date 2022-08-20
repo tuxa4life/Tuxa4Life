@@ -1,6 +1,6 @@
 - 👋 Hi, I’m @Tuxa4Life
 - 👀 I’m interested in ... Programming duh 
-- 🌱 I’m currently learning ... Python, C# 
+- 🌱 I’m currently learning ... Python, C#, React
 - 💞️ I’m looking to collaborate on ... Threesome
 - 📫 How to reach me ... nikoloztuxa@gmail.com
 
