@@ -1,5 +1,5 @@
 ### Heyo 👋 
-# My name's Nikoloz Tukhashvili
+# I'm Tuxa!
 In development since 2019 👨‍💻
 
 Born in 2005 🎂
