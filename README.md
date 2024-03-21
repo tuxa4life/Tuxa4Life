@@ -12,4 +12,5 @@ Confident in:
 6) **Arduino** - 2022 🤖
 7) **Java** - 2023 🗑
 8) OCaml - 2023 🐫
+9) MIPS Assembly Language - 2024 🧱
 ___
