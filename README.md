@@ -13,4 +13,5 @@ Confident in:
 7) **Java** - 2023 🗑
 8) OCaml - 2023 🐫
 9) MIPS Assembly Language - 2024 🧱
+10) Cyclone V Verilog - 2024 💽
 ___
