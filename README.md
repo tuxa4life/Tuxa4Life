@@ -18,4 +18,5 @@ Welcome to my profile!
 <hr>
 <br>
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact) 
+<a href="https://git.io/streak-stats"><img src="https://streak-stats.demolab.com?user=Tuxa4Life" alt="GitHub Streak" /></a>
