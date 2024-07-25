@@ -18,5 +18,3 @@ ___
 
 
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=donut)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=pie)
