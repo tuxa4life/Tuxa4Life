@@ -15,3 +15,6 @@ Confident in:
 9) MIPS Assembly Language - 2024 🧱
 10) Cyclone V Verilog - 2024 💽
 ___
+
+
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact)
