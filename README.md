@@ -18,5 +18,5 @@ Welcome to my profile!
 <hr>
 <br>
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact) 
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Tuxa4Life&layout=compact&hide=shaderlab) 
 <br>
