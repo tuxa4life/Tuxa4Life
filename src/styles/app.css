@@ -1,133 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Raleway:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Raleway:wght@500;700&display=swap');
+
+/* ==================== Base Styles ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     color: #e0e0e0;
     background-color: #121212;
+    overflow-x: hidden;
 }
 
-h1,
-h2,
-h3,
-h4 {
+/* ==================== Typography ==================== */
+h1, h2, h3, h4 {
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.5px;
 }
 
-h1 {
-    font-size: 2.4rem;
-}
-
-h2 {
-    font-size: 1.8rem;
-}
-
-p,
-span {
-    font-size: 1rem;
-    font-weight: 300;
-}
-
-@media (max-width: 1200px) {
-    h1 {
-        font-size: 2.2rem;
-    }
-    h2 {
-        font-size: 1.6rem;
-    }
-    p,
-    span {
-        font-size: 0.95rem;
-    }
-}
-
-@media (max-width: 992px) {
-    h1 {
-        font-size: 2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-    p,
-    span {
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.8rem;
-    }
-    h2 {
-        font-size: 1.3rem;
-    }
-    p,
-    span {
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.6rem;
-    }
-    h2 {
-        font-size: 1.2rem;
-    }
-    p,
-    span {
-        font-size: 0.8rem;
-    }
-}
+h1 { font-size: 2.4rem; }
+h2 { font-size: 1.8rem; }
+p, span { font-size: 1rem; font-weight: 300; }
 
 a {
     color: #a78bfa;
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    transition: 0.4s all;
+a:hover {
+    opacity: 0.8;
 }
 
+/* ==================== Layout ==================== */
 .app {
     width: 100%;
     min-height: 100dvh;
     padding-bottom: 30px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     background-color: #121212;
 }
 
 section {
     width: 55%;
+    transition: all 0.4s ease;
 }
 
-.contour {
-    width: 2px;
-    height: 400px;
-    background: linear-gradient(to bottom, rgba(18, 18, 18, 0) 0%, rgb(75, 0, 130) 50%, rgba(18, 18, 18, 0) 100%) center center / cover no-repeat;
-    position: fixed;
-    bottom: 30vh;
-    left: 22.5%;
+.container {
+    padding: 0 50px;
 }
 
+/* ==================== Decorative Elements ==================== */
+.contour,
 .contour2 {
     width: 2px;
     height: 400px;
-    background: linear-gradient(to bottom, rgba(18, 18, 18, 0) 0%, rgb(75, 0, 130) 50%, rgba(18, 18, 18, 0) 100%) center center / cover no-repeat;
+    background: linear-gradient(
+        to bottom,
+        rgba(18, 18, 18, 0) 0%,
+        rgb(75, 0, 130) 50%,
+        rgba(18, 18, 18, 0) 100%
+    );
     position: fixed;
     bottom: 30vh;
-    right: 22.5%;
+    transition: opacity 0.4s ease;
 }
 
+.contour { left: 22.5%; }
+.contour2 { right: 22.5%; }
+
+/* ==================== Profile Section ==================== */
 .profile {
     margin-top: 15vh;
     position: relative;
@@ -135,18 +83,31 @@ section {
 
 .gradient {
     z-index: 0;
-
     width: 100%;
     height: 200px;
-
     border-radius: 15px 15px 0 0;
-    background: linear-gradient(to bottom, rgb(74, 0, 128) 0%, rgb(75, 0, 130) 30%, rgb(18, 18, 18) 100%) center center / cover no-repeat;
+    background: linear-gradient(
+        to bottom,
+        rgb(74, 0, 128) 0%,
+        rgb(75, 0, 130) 30%,
+        rgb(18, 18, 18) 100%
+    );
+    transition: box-shadow 0.3s ease;
 }
 
 .hider {
     width: 100%;
     height: 50px;
     background-color: rgb(18, 18, 18);
+}
+
+.profile-info {
+    z-index: 1;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    position: absolute;
+    margin: 120px 10% 0 10%;
 }
 
 .pfp-container {
@@ -160,17 +121,12 @@ section {
     object-fit: cover;
     border-radius: 50%;
     object-position: 10% center;
-    border: 4px rgb(18, 18, 18) solid;
+    border: 4px solid rgb(18, 18, 18);
+    transition: transform 0.3s ease;
 }
 
-.profile-info {
-    z-index: 1;
-
-    width: 100%;
-    height: 150px;
-    display: flex;
-    position: absolute;
-    margin: 120px 10% 0 10%;
+.pfp-container img:hover {
+    transform: scale(1.05);
 }
 
 .location.icon {
@@ -187,10 +143,7 @@ section {
     padding-left: 2vw;
 }
 
-.container {
-    padding: 0 50px;
-}
-
+/* ==================== Buttons ==================== */
 .aboutme .button-container {
     margin-top: 50px;
     width: 80%;
@@ -198,75 +151,77 @@ section {
     justify-content: center;
     flex-wrap: wrap;
     margin-left: 10%;
+    gap: 10px;
+}
+
+.aboutme .button-container button {
+    border-radius: 5px;
+    padding: 12px 30px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 200px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 button.basic {
     background-color: #1e1d1d;
-    border: 1px rgb(60, 60, 60) solid;
-    box-shadow: inset 0px 0px 0px rgba(30, 29, 29, 1);
+    border: 1px solid rgb(60, 60, 60);
     color: #e0e0e0;
 }
 
 button.basic:hover {
     background-color: rgb(35, 35, 35);
+    transform: translateY(-3px);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 button.primary {
     background-color: #4a0080;
-    box-shadow: inset 0px 0px 0px rgba(30, 29, 29, 1);
     color: white;
     border: none;
 }
 
 button.primary:hover {
     background-color: #7b01d2;
-    box-shadow: 0px 0px 20px 0px rgba(75, 0, 130, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0px 5px 20px rgba(75, 0, 130, 0.6);
 }
 
-.aboutme .button-container button {
-    border-radius: 5px;
-    padding: 10px 30px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 5px;
-    width: 150px;
-}
-
-.aboutme .button-container button:hover {
-    transform: translateY(-2px);
-}
-
-.skills {
-    margin-top: 10vh;
-}
-
+/* ==================== Experience Section ==================== */
 .experience {
     margin-top: 10vh;
 }
+
 .exp-wrapper {
     display: flex;
     width: 100%;
     justify-content: center;
     margin-top: 30px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .exp-box {
     width: 10vw;
     height: 10vw;
+    min-width: 120px;
+    min-height: 120px;
     background-color: #1e1d1d;
-    border: 1px rgb(60, 60, 60) solid;
-    box-shadow: inset 0px 0px 10px 0px rgba(30, 29, 29, 1);
+    border: 1px solid rgb(60, 60, 60);
+    box-shadow: inset 0px 0px 10px rgba(30, 29, 29, 1);
     border-radius: 7px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    margin: 5px;
+    transition: all 0.3s ease;
 }
 
 .exp-box:hover {
     background-color: rgb(35, 35, 35);
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 20px rgba(75, 0, 130, 0.3);
 }
 
 .exp-box p:nth-child(1) {
@@ -277,6 +232,10 @@ button.primary:hover {
 .exp-box p:nth-child(2) {
     font-size: 52px;
     font-weight: 800;
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .exp-box * {
@@ -285,8 +244,14 @@ button.primary:hover {
     padding: 0 5px;
 }
 
+/* ==================== Skills Section ==================== */
+.skills {
+    margin-top: 10vh;
+}
+
 .skills-container ul {
     margin-left: 5%;
+    list-style: none;
 }
 
 .skills-container li {
@@ -300,26 +265,26 @@ button.primary:hover {
 .skills-container ul li > div {
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .skill-item {
     height: 2rem;
     display: flex;
-    padding: 3px 10px;
-
+    padding: 3px 12px;
     background-color: #1e1d1d;
-    border: 1px rgb(60, 60, 60) solid;
-    box-shadow: inset 0px 0px 10px 0px rgba(30, 29, 29, 1);
+    border: 1px solid rgb(60, 60, 60);
+    box-shadow: inset 0px 0px 10px rgba(30, 29, 29, 1);
     border-radius: 5px;
-    margin: 5px;
-
-    display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
+    transition: all 0.3s ease;
 }
 
 .skill-item:hover {
     background-color: rgb(35, 35, 35);
+    transform: translateY(-2px);
+    box-shadow: 0px 3px 10px rgba(75, 0, 130, 0.2);
 }
 
 .skill-item img {
@@ -329,16 +294,21 @@ button.primary:hover {
     margin-right: 10px;
 }
 
+/* ==================== Projects Section ==================== */
+.projects {
+    margin-top: 10vh;
+}
+
+/* ==================== Socials Sidebar ==================== */
 .socials {
     position: fixed;
     left: 12%;
     bottom: 0;
-
     width: 50px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 100;
 }
 
 .socials .line {
@@ -355,28 +325,24 @@ button.primary:hover {
     margin: 0 0 20px 0;
 }
 
-.logo-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
 .logo-wrapper span {
     position: absolute;
     left: 150%;
-    top: 10%;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: white;
     color: black;
     padding: 5px 10px;
     border-radius: 3px;
     opacity: 0;
-    transform: translateY(15px);
     transition: all 0.3s ease;
     pointer-events: none;
+    white-space: nowrap;
+    font-size: 0.85rem;
 }
 
 .logo-wrapper:hover span {
     opacity: 1;
-    transform: translateY(0);
 }
 
 .socials img {
@@ -384,21 +350,24 @@ button.primary:hover {
     height: 40px;
     object-fit: cover;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
+.socials img:hover {
+    transform: scale(1.1);
+}
+
+/* ==================== Email Sidebar ==================== */
 .email-bar {
     position: fixed;
     right: 13%;
     bottom: 0;
-    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    color: white;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
     transform: rotate(180deg);
+    z-index: 100;
 }
 
 .email-bar a {
@@ -406,11 +375,14 @@ button.primary:hover {
     transform: rotate(180deg);
     color: #e0e0e0;
     cursor: pointer;
-    transition: .2s all;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
 }
 
 .email-bar a:hover {
-    scale: 1.05;
+    transform: rotate(180deg) scale(1.05);
+    color: #a78bfa;
 }
 
 .email-bar .line {
@@ -420,164 +392,119 @@ button.primary:hover {
     border-radius: 1px 1px 0 0;
 }
 
-@media screen and (max-width: 1200px) {
-    .profile-info {
-        margin: 100px 2% 0 5%;
-    }
-    section {
-        width: 65%;
-    }
-
-    .contour {
-        left: 17.5%;
-    }
-    .contour2 {
-        right: 17.5%;
-    }
-
+/* ==================== Responsive Design ==================== */
+@media (max-width: 1200px) {
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.6rem; }
+    p, span { font-size: 0.95rem; }
+    
+    section { width: 65%; }
+    .profile-info { margin: 100px 2% 0 5%; }
+    .contour { left: 17.5%; }
+    .contour2 { right: 17.5%; }
+    
     .exp-box {
         width: 12vw;
         height: 12vw;
     }
-
-    .exp-box p:nth-child(1) {
-        font-size: 14px;
-    }
-
-    .exp-box p:nth-child(2) {
-        font-size: 36px;
-    }
+    .exp-box p:nth-child(1) { font-size: 14px; }
+    .exp-box p:nth-child(2) { font-size: 36px; }
 }
 
-@media screen and (max-width: 1000px) {
+@media (max-width: 1000px) {
     .profile-info {
         flex-direction: column;
         align-items: center;
         margin: 120px 0 0 0;
     }
-    .pfp-container {
-        margin-bottom: 30px;
-    }
-
+    .pfp-container { margin-bottom: 30px; }
     .meta {
         text-align: center;
         padding: 0 20px;
     }
+    .aboutme { margin-top: 13vh; }
 
-    .aboutme {
-        margin-top: 13vh;
+    .socials, .email-bar {
+        display: none;
     }
 }
 
-@media screen and (max-width: 800px) {
-    section {
-        width: 80%;
-    }
-    .contour {
-        left: 10%;
-    }
-    .contour2 {
-        right: 10%;
-    }
+@media (max-width: 992px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    p, span { font-size: 0.9rem; }
+}
 
+@media (max-width: 800px) {
+    section { width: 80%; }
+    .contour { left: 10%; }
+    .contour2 { right: 10%; }
+    
     .exp-box {
         width: 15vw;
         height: 15vw;
     }
-
-    .exp-box p:nth-child(1) {
-        font-size: 12px;
-    }
-
-    .exp-box p:nth-child(2) {
-        font-size: 32px;
-    }
+    .exp-box p:nth-child(1) { font-size: 12px; }
+    .exp-box p:nth-child(2) { font-size: 32px; }
 }
 
-@media screen and (max-width: 600px) {
-    section {
-        width: 90%;
-    }
+@media (max-width: 768px) {
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.3rem; }
+    p, span { font-size: 0.85rem; }
+}
 
-    .aboutme {
-        margin-top: 20vh;
-    }
-
-    .contour {
-        left: 5%;
-    }
-    .contour2 {
-        right: 5%;
-    }
-
+@media (max-width: 600px) {
+    section { width: 90%; }
+    .aboutme { margin-top: 20vh; }
+    .contour { left: 5%; }
+    .contour2 { right: 5%; }
+    
     .exp-wrapper {
         flex-wrap: wrap;
         justify-content: space-evenly;
     }
-
     .exp-box {
         width: 30vw;
         height: 30vw;
     }
-
-    .exp-box p:nth-child(1) {
-        font-size: 15px;
-    }
-
-    .exp-box p:nth-child(2) {
-        font-size: 42px;
-    }
-
+    .exp-box p:nth-child(1) { font-size: 15px; }
+    .exp-box p:nth-child(2) { font-size: 42px; }
+    
     .skill-item {
         height: 1.5rem;
         font-size: 0.75rem;
     }
-
     .skill-item img {
         height: 1rem;
         width: 1rem;
     }
 }
 
-@media screen and (max-width: 400px) {
-    section {
-        width: 100%;
-    }
-
-    .contour,
-    .contour2 {
-        display: none;
-    }
-
-    .gradient {
-        box-shadow: 0px -5px 20px 0px rgba(75, 0, 130, 0.6);
-    }
-
+@media (max-width: 500px) {
+    section { width: 100%; }
+    .contour, .contour2 { display: none; }
+    .gradient { box-shadow: 0px -5px 20px rgba(75, 0, 130, 0.6); }
+    
     .exp-box {
         width: 35vw;
         height: 35vw;
     }
-
-    .exp-box p:nth-child(1) {
-        font-size: 12px;
-    }
-
-    .exp-box p:nth-child(2) {
-        font-size: 36px;
-    }
+    .exp-box p:nth-child(1) { font-size: 12px; }
+    .exp-box p:nth-child(2) { font-size: 36px; }
 }
 
-@media screen and (max-width: 347px) {
+@media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; }
+    p, span { font-size: 0.8rem; }
+}
+
+@media (max-width: 347px) {
     .exp-box {
         width: 30vw;
         height: 30vw;
     }
-
-    .exp-box p:nth-child(1) {
-        font-size: 10px;
-    }
-
-    .exp-box p:nth-child(2) {
-        font-size: 30px;
-    }
+    .exp-box p:nth-child(1) { font-size: 10px; }
+    .exp-box p:nth-child(2) { font-size: 30px; }
 }
