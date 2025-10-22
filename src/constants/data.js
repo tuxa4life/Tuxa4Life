@@ -168,8 +168,8 @@ export const projects = [
                 label: 'Semantic-UI',
             },
         ],
-        sourceUrl: 'https://github.com/tuxa4life/KIU-Drop',
-        demoUrl: 'https://kiudrop.tuxa.ge',
+        sourceUrl: 'https://github.com/tuxa4life/Ra-Sad-Rodis',
+        demoUrl: 'https://ra-sad-rodis.tuxa.ge',
     }
 ]
 
