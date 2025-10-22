@@ -1,5 +1,6 @@
 import AboutMe from './components/AboutMe'
 import Experience from './components/Experience'
+import Footer from './components/Footer'
 import Profile from './components/Profile'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
@@ -15,15 +16,15 @@ const App = () => {
             <Experience />
             <Skills />
             <Projects />
-
             <div className="contour"></div>
             <div className="contour2"></div>
-
             <Socials />
             <div className="email-bar">
                 <div className="line"></div>
-                <a href='mailto:nikoloztuxa@gmail.com'>nikoloztuxa@gmail.com</a>
+                <a href="mailto:nikoloztuxa@gmail.com">nikoloztuxa@gmail.com</a>
             </div>
+
+            <Footer />
         </div>
     )
 }

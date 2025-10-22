@@ -1,21 +1,7 @@
-import { useEffect, useState } from 'react'
-import { skills } from '../constants/data'
+import { skills, icons } from '../constants/data'
 import SkillItem from './misc/SkillItem'
 
 const Skills = () => {
-    const [icons, setIcons] = useState({})
-
-    useEffect(() => {
-        const images = {}
-        const r = require.context('../svgs/skills', false, /\.svg$/)
-        r.keys().forEach((item) => {
-            const name = item.replace('./', '').replace('.svg', '')
-            images[name] = r(item)
-        })
-
-        setIcons(images)
-    }, [])
-
     const renderedSkills = Object.keys(skills).map((term, i) => {
         return (
             <li key={`skill-${i}`}>
@@ -35,7 +21,7 @@ const Skills = () => {
     })
 
     return (
-        <section className="skills">
+        <section className="skills" id='skill'>
             <div className="skills-container container">
                 <h2>Skills</h2>
                 <ul>{renderedSkills}</ul>

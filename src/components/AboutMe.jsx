@@ -10,21 +10,8 @@ const AboutMe = () => {
         return age
     }
 
-    const handleDownload = () => {
-        const link = document.createElement('a')
-        link.href = 'https://drive.usercontent.google.com/u/0/uc?id=16xbWuhNFlLCdCsyroVD4aNIRBG8iGhQA&export=download'
-        link.click()
-    }
-
-    const openCv = () => {
-        const link = document.createElement('a')
-        link.target = '_blank'
-        link.href = 'https://drive.google.com/file/d/16xbWuhNFlLCdCsyroVD4aNIRBG8iGhQA/view'
-        link.click()
-    }
-
     return (
-        <section className="aboutme">
+        <section className="aboutme" id="about">
             <div className="about-me-container container">
                 <h2>About Me</h2>
                 <p>
@@ -33,8 +20,8 @@ const AboutMe = () => {
             </div>
 
             <div className="button-container">
-                <button className="primary" onClick={openCv}>Open CV</button>
-                <button className="basic" onClick={handleDownload}>Download CV</button>
+                <button className="primary" onClick={() => window.open('https://drive.google.com/file/d/16xbWuhNFlLCdCsyroVD4aNIRBG8iGhQA/view', '_blank')}>Open CV</button>
+                <button className="basic" onClick={() => window.open('https://drive.usercontent.google.com/u/0/uc?id=16xbWuhNFlLCdCsyroVD4aNIRBG8iGhQA&export=download')}>Download CV</button>
             </div>
         </section>
     )
