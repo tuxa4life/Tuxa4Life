@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Hey 👋
 
-## Getting Started
+# I'm Tuxa!
 
-First, run the development server:
+Welcome to my profile! I'm Nikoloz Tukhashvili — I build things for the web, from glassy front-ends to the APIs behind them.
+
+This repo is the source for my personal website, **[tuxa.ge](https://tuxa.ge)** — a glassy bento-grid built with Next.js.
+
+---
+
+## 🛠️ tuxa.ge — how it's built
+
+- **Frontend** — Next.js (App Router, ISR with 1h revalidation), Tailwind CSS v4, [Motion](https://motion.dev) for the card → panel morph animations, and a canvas dot-field background.
+- **Content** — a Supabase table (`site_content`, key/value JSONB, one row per section: `profile`, `skills`, `experience`, `education`, `achievements`, `projects`). Content is editable straight from the Supabase dashboard — no redeploy needed. Falls back to built-in defaults ([src/content/defaults.ts](src/content/defaults.ts)) when Supabase is unset or a row is missing.
+- **Projects** — fetched from GitHub at request time (cached 1h):
+  - With `GITHUB_TOKEN`: pinned repositories via the GraphQL API.
+  - Without: top public repos (by stars, then recency) via the REST API.
+  - On total failure: a manual project list from content defaults / Supabase.
+
+## 🚀 Run it locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy `.env.example` to `.env.local` and fill in what you have — everything is optional; the site renders fully without any env vars. To wire up the Supabase content store, run [supabase/schema.sql](supabase/schema.sql) in the Supabase SQL editor, then insert rows with keys matching the sections above (JSON shapes mirror [src/lib/types.ts](src/lib/types.ts)).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Deployed on Vercel: import the repo, set the env vars from `.env.example`, deploy.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📫 Reach me
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 🌐 [tuxa.ge](https://tuxa.ge)
+- 📧 nikoloztuxa@gmail.com

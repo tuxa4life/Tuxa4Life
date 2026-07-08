@@ -1,26 +1,132 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #eef0f3;
+  --fg: #15171b;
+  /* Solid (non-alpha) muted color so background dots never show through text */
+  --muted: color-mix(in srgb, #15171b 52%, #eef0f3);
+  --card: rgba(255, 255, 255, 0.82);
+  --brd: rgba(255, 255, 255, 0.75);
+  --brd2: rgba(21, 23, 27, 0.12);
+  --chip: rgba(21, 23, 27, 0.05);
+  --shadow: 0 24px 60px -30px rgba(20, 22, 28, 0.32);
+  --panel: rgba(255, 255, 255, 0.94);
+  --radius: 24px;
+  --blur: 24px;
+}
+
+[data-theme="dark"] {
+  --paper: #0d0f12;
+  --fg: #f2f4f7;
+  --muted: color-mix(in srgb, #f2f4f7 55%, #0d0f12);
+  --card: rgba(30, 32, 37, 0.82);
+  --brd: rgba(255, 255, 255, 0.09);
+  --brd2: rgba(255, 255, 255, 0.12);
+  --chip: rgba(255, 255, 255, 0.07);
+  --shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.65);
+  --panel: rgba(22, 24, 28, 0.95);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-chip: var(--chip);
+  --color-brd: var(--brd);
+  --color-brd2: var(--brd2);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-space-grotesk);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+::selection {
+  background: rgba(120, 120, 130, 0.22);
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--fg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background 0.55s ease, color 0.55s ease;
+}
+
+/* Frosted glass surface shared by cards and floating buttons.
+   Only the unprefixed property here — Lightning CSS adds -webkit- per browserslist. */
+.glass {
+  background: var(--card);
+  backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--brd);
+  box-shadow: var(--shadow);
+  transition: background 0.55s ease, border-color 0.55s ease;
+}
+
+/* Expanded card gets the near-opaque panel background */
+.glass.expanded {
+  background: var(--panel);
+  box-shadow: 0 40px 90px -40px rgba(10, 12, 16, 0.55);
+}
+
+/* Solid tint standing in for low-opacity text, so dots can't bleed through */
+.ghost-text {
+  color: color-mix(in srgb, var(--fg) 13%, var(--paper));
+}
+
+/* Rail tiles: card-like rows on mobile; on desktop a 56px square anchored to
+   the top-right of its wrapper so it grows leftward. Borderless chip when
+   idle, full glass + border while the rail is hovered (.rail-open). */
+.mini-tile {
+  background: var(--card);
+  border: 1px solid var(--brd);
+  box-shadow: var(--shadow);
+  transition:
+    width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+@media (min-width: 64rem) {
+  .mini-tile {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 20;
+    height: 100%;
+    /* Square before JS takes over; expanded widths are set inline in pixels
+       (measured from content) because width:max-content can't animate */
+    aspect-ratio: 1;
+    background: var(--card);
+    border-color: transparent;
+    box-shadow: none;
+  }
+  .mini-tile.rail-open {
+    border-color: var(--brd);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+  }
+}
+
+/* Thin minimal scrollbar for panel content. Standard properties cover
+   Chromium/Firefox; ::-webkit-* covers Safari. */
+.slim-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brd2) transparent;
+}
+.slim-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.slim-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slim-scroll::-webkit-scrollbar-thumb {
+  background: var(--brd2);
+  border-radius: 999px;
+}
+.slim-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }
