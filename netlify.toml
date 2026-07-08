@@ -1,0 +1,11 @@
+[build]
+  command = "next build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Official Next.js runtime — enables App Router, SSR, and ISR on Netlify.
+# Netlify auto-installs this, but pinning it here keeps builds deterministic.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
