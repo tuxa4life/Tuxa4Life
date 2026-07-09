@@ -113,7 +113,13 @@ export function ExperiencePanel({ content }: { content: SiteContent }) {
   );
 }
 
-export function ProjectsPanel({ projects }: { projects: Project[] }) {
+export function ProjectsPanel({
+  projects,
+  githubUrl,
+}: {
+  projects: Project[];
+  githubUrl: string;
+}) {
   return (
     <div>
       <PanelHeading label="Projects" title="Things I've made" />
@@ -161,6 +167,18 @@ export function ProjectsPanel({ projects }: { projects: Project[] }) {
             </div>
           );
         })}
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-between rounded-2xl border border-brd2 px-5 py-[18px] text-fg transition-colors duration-300 hover:bg-chip"
+        >
+          <span className="flex items-center gap-3 text-[15px] font-semibold">
+            <GithubIcon size={19} />
+            Check out more on GitHub
+          </span>
+          <ArrowUpRightIcon size={15} className="opacity-45" />
+        </a>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import type { Project, SiteContent } from "@/lib/types";
 import { stripMarkup } from "@/lib/markup";
 import DotField from "@/components/DotField";
@@ -70,19 +70,29 @@ export default function Site({
   const { profile } = content;
   const [dark, setDark] = useState(false);
   const [selected, setSelected] = useState<SectionKey | null>(null);
+  const [hint, setHint] = useState<string | null>(null);
 
   // Desktop rail: icon-only by default, expands leftward over the panel on
   // hover. Collapse is delayed slightly so crossing the gaps between rail
-  // items doesn't flicker.
+  // items doesn't flicker. The expansion cascade radiates outward from the
+  // tile the mouse entered on (railOrigin); it's locked while the rail is
+  // open so moving between tiles doesn't reshuffle mid-animation.
   const [railHover, setRailHover] = useState(false);
+  const [railOrigin, setRailOrigin] = useState(0);
+  const railHoverRef = useRef(false);
   const railTimer = useRef<number | null>(null);
-  const railEnter = useCallback(() => {
+  const railEnter = useCallback((origin: number) => {
     if (railTimer.current) clearTimeout(railTimer.current);
+    if (!railHoverRef.current) setRailOrigin(origin);
+    railHoverRef.current = true;
     setRailHover(true);
   }, []);
   const railLeave = useCallback(() => {
     if (railTimer.current) clearTimeout(railTimer.current);
-    railTimer.current = window.setTimeout(() => setRailHover(false), 180);
+    railTimer.current = window.setTimeout(() => {
+      railHoverRef.current = false;
+      setRailHover(false);
+    }, 180);
   }, []);
 
   // width:max-content can't be transitioned cross-browser, so rail widths are
@@ -142,7 +152,10 @@ export default function Site({
 
   // Never leave the rail stuck open after a section closes
   useEffect(() => {
-    if (!selected) setRailHover(false);
+    if (!selected) {
+      railHoverRef.current = false;
+      setRailHover(false);
+    }
   }, [selected]);
 
   const sections: {
@@ -184,7 +197,7 @@ export default function Site({
       title: "Projects",
       icon: <LayersIcon />,
       gridClass: "sm:col-span-2 lg:col-span-1 lg:col-start-4 lg:row-span-3 lg:row-start-1",
-      panel: <ProjectsPanel projects={projects} />,
+      panel: <ProjectsPanel projects={projects} githubUrl={profile.githubUrl} />,
       body: (
         <div className="flex h-full flex-col justify-between gap-5 p-[22px] lg:gap-0">
           <ChipIcon><LayersIcon /></ChipIcon>
@@ -278,24 +291,66 @@ export default function Site({
         </div>
       </div>
 
-      {/* Social links, top right */}
+      {/* Social links, top right. Hovering a button pops its handle in a
+          small pill underneath — centered under the button, nudged left when
+          it would poke past the screen edge (long email addresses). */}
       <div className="absolute top-[38px] right-6 z-[6] flex gap-3 lg:right-11">
-        <a
-          href={profile.githubUrl}
-          target="_blank"
-          rel="noreferrer"
-          title="GitHub"
-          className="glass flex h-[46px] w-[46px] items-center justify-center rounded-[14px] text-fg transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[3px] hover:scale-[1.04]"
-        >
-          <GithubIcon />
-        </a>
-        <a
-          href={`mailto:${profile.email}`}
-          title="Email"
-          className="glass flex h-[46px] w-[46px] items-center justify-center rounded-[14px] text-fg transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[3px] hover:scale-[1.04]"
-        >
-          <MailIcon size={21} />
-        </a>
+        {[
+          {
+            href: profile.githubUrl,
+            title: "GitHub",
+            hint: profile.githubUrl.replace(/\/+$/, "").split("/").pop(),
+            icon: <GithubIcon />,
+          },
+          {
+            href: `mailto:${profile.email}`,
+            title: "Email",
+            hint: profile.email,
+            icon: <MailIcon size={21} />,
+          },
+        ].map((link) => (
+          <div
+            key={link.title}
+            className="relative"
+            onMouseEnter={() => setHint(link.title)}
+            onMouseLeave={() => setHint(null)}
+          >
+            <a
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel="noreferrer"
+              aria-label={link.title}
+              className="glass flex h-[46px] w-[46px] items-center justify-center rounded-[14px] text-fg transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[3px] hover:scale-[1.04]"
+            >
+              {link.icon}
+            </a>
+            <AnimatePresence>
+              {hint === link.title && (
+                <motion.div
+                  // Center under the 46px button (offsetWidth ignores the
+                  // in-flight scale, unlike getBoundingClientRect), clamped
+                  // so the pill stays 12px inside the viewport
+                  ref={(el: HTMLDivElement | null) => {
+                    if (!el) return;
+                    const btn = el.parentElement!.getBoundingClientRect();
+                    const centered = (btn.width - el.offsetWidth) / 2;
+                    const overflow =
+                      btn.left + centered + el.offsetWidth - (window.innerWidth - 12);
+                    el.style.left = `${centered - Math.max(0, overflow)}px`;
+                  }}
+                  initial={{ opacity: 0, scale: 0.4, y: -9 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, y: -7, transition: { duration: 0.18, ease: EASE } }}
+                  transition={{ type: "spring", stiffness: 520, damping: 21, mass: 0.8 }}
+                  className="glass pointer-events-none absolute top-full origin-top rounded-[9px] px-2.5 py-1 text-[11px] whitespace-nowrap text-muted"
+                  style={{ marginTop: 8 }}
+                >
+                  {link.hint}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
       </div>
 
       {/* Bento board */}
@@ -311,7 +366,15 @@ export default function Site({
                 left: railHover ? -96 : 0,
                 width: railHover ? 168 : 72,
               }}
-              onMouseEnter={railEnter}
+              onMouseEnter={(e) => {
+                // Map the entry point to one of the 5 rail rows so the
+                // cascade radiates from the tile under the cursor
+                const rect = e.currentTarget.getBoundingClientRect();
+                const row = Math.floor(
+                  ((e.clientY - rect.top) / rect.height) * others.length,
+                );
+                railEnter(Math.min(others.length - 1, Math.max(0, row)));
+              }}
               onMouseLeave={railLeave}
             />
           )}
@@ -330,6 +393,12 @@ export default function Site({
                   : "mini";
               const miniIndex = others.indexOf(section.key);
 
+              // Cascade: expansion radiates outward from the hovered tile;
+              // collapse retracts back toward it (farthest tiles first)
+              const originDist = Math.abs(miniIndex - railOrigin);
+              const maxDist = Math.max(railOrigin, others.length - 1 - railOrigin);
+              const cascadeDelay = `${(railHover ? originDist : maxDist - originDist) * 70}ms`;
+
               const wrapperClass =
                 mode === "grid"
                   ? `${section.gridClass} transition-transform duration-[400ms] ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-1.5`
@@ -342,7 +411,7 @@ export default function Site({
                   key={section.key}
                   className={wrapperClass}
                   onClick={mode === "expanded" ? undefined : () => setSelected(section.key)}
-                  onMouseEnter={mode === "mini" ? railEnter : undefined}
+                  onMouseEnter={mode === "mini" ? () => railEnter(miniIndex) : undefined}
                   onMouseLeave={mode === "mini" ? railLeave : undefined}
                 >
                   <motion.div
@@ -357,12 +426,7 @@ export default function Site({
                     }}
                     style={{
                       borderRadius: mode === "mini" ? 16 : 24,
-                      // Cascade: top-to-bottom on expand, bottom-to-top on
-                      // collapse
-                      transitionDelay:
-                        mode === "mini"
-                          ? `${(railHover ? miniIndex : others.length - 1 - miniIndex) * 70}ms`
-                          : undefined,
+                      transitionDelay: mode === "mini" ? cascadeDelay : undefined,
                     }}
                     className={
                       mode === "expanded"
@@ -401,9 +465,7 @@ export default function Site({
                           className={`font-display text-sm font-semibold tracking-[-.01em] whitespace-nowrap transition-opacity duration-200 lg:pl-5 ${
                             railHover ? "opacity-100" : "lg:opacity-0"
                           }`}
-                          style={{
-                            transitionDelay: `${(railHover ? miniIndex : others.length - 1 - miniIndex) * 70}ms`,
-                          }}
+                          style={{ transitionDelay: cascadeDelay }}
                         >
                           {section.title}
                         </span>
