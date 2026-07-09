@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import type { Project, SiteContent } from "@/lib/types";
+import { stripMarkup } from "@/lib/markup";
 import DotField from "@/components/DotField";
 import {
   AboutPanel,
@@ -192,7 +193,7 @@ export default function Site({
               <div key={project.name} className="border-t border-brd2 pt-2.5">
                 <div className="truncate text-[13px] font-semibold">{project.name}</div>
                 <div className="truncate text-[11px] text-muted">
-                  {project.description || project.tech.join(" · ")}
+                  {stripMarkup(project.description) || project.tech.join(" · ")}
                 </div>
               </div>
             ))}

@@ -1,4 +1,5 @@
 import type { Project, SiteContent } from "@/lib/types";
+import { Markup } from "@/lib/markup";
 import {
   ArrowUpRightIcon,
   DownloadIcon,
@@ -28,7 +29,7 @@ export function AboutPanel({ content }: { content: SiteContent }) {
           key={i}
           className={`max-w-[58ch] text-base leading-[1.7] ${i === 0 ? "text-fg" : "mt-3.5 text-muted"}`}
         >
-          {paragraph}
+          <Markup text={paragraph} />
         </p>
       ))}
     </div>
@@ -70,7 +71,9 @@ export function ExperiencePanel({ content }: { content: SiteContent }) {
             <div className="min-w-[110px] pt-0.5 text-[13px] text-muted">{item.period}</div>
             <div>
               <div className="text-base font-semibold">{item.title}</div>
-              <div className="mt-1 text-sm leading-relaxed text-muted">{item.description}</div>
+              <div className="mt-1 text-sm leading-relaxed text-muted">
+                <Markup text={item.description} />
+              </div>
             </div>
           </div>
         ))}
@@ -97,7 +100,11 @@ export function ExperiencePanel({ content }: { content: SiteContent }) {
             <div className="min-w-[110px] text-[13px] text-muted">{item.period}</div>
             <div>
               <div className="text-sm font-semibold">{item.institution}</div>
-              {item.note && <div className="mt-0.5 text-[13px] text-muted">{item.note}</div>}
+              {item.note && (
+                <div className="mt-0.5 text-[13px] text-muted">
+                  <Markup text={item.note} />
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -130,7 +137,8 @@ export function ProjectsPanel({ projects }: { projects: Project[] }) {
               </div>
               {project.description && (
                 <div className="mt-1.5 text-sm leading-relaxed text-muted">
-                  {project.description}
+                  {/* Card may be wrapped in an <a>; nested anchors are invalid */}
+                  <Markup text={project.description} links={!project.url} />
                 </div>
               )}
             </>
