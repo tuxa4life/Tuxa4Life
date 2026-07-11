@@ -55,6 +55,12 @@ export const MailIcon = (p: IconProps) => (
   </Base>
 );
 
+export const PhoneIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 4.5 4.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z" />
+  </Base>
+);
+
 export const FileIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />

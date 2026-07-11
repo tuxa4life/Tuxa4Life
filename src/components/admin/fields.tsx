@@ -47,6 +47,30 @@ export function TextInput({
   );
 }
 
+export function SelectInput({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`${inputClass} cursor-pointer appearance-none`}
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value} className="bg-paper text-fg">
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 export function TextArea({
   value,
   onChange,
@@ -158,6 +182,29 @@ export function MarkupTextArea({
         </div>
       )}
     </div>
+  );
+}
+
+/** Small labeled checkbox, styled to match the chip-toned inputs. */
+export function CheckboxField({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  return (
+    <label className="flex w-fit cursor-pointer items-center gap-2.5 text-sm text-fg">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-4 w-4 cursor-pointer accent-current"
+      />
+      {label}
+    </label>
   );
 }
 

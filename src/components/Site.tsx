@@ -259,7 +259,7 @@ export default function Site({
       title: "Résumé",
       icon: <FileIcon />,
       gridClass: "lg:col-start-3 lg:row-start-3",
-      panel: <ResumePanel />,
+      panel: <ResumePanel cv={content.cv} />,
       body: (
         <div className="flex h-full flex-col justify-between gap-5 p-5 lg:gap-0">
           <ChipIcon><FileIcon /></ChipIcon>

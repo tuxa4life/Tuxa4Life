@@ -1,10 +1,11 @@
-import type { Project, SiteContent } from "@/lib/types";
+import type { CvData, Project, SiteContent } from "@/lib/types";
 import { Markup } from "@/lib/markup";
+import CvDownloadButton from "@/components/CvDownloadButton";
 import {
   ArrowUpRightIcon,
-  DownloadIcon,
   GithubIcon,
   MailIcon,
+  PhoneIcon,
   StarIcon,
 } from "@/components/icons";
 
@@ -193,6 +194,16 @@ export function ContactPanel({ content }: { content: SiteContent }) {
       text: profile.email,
       cta: "Email →",
     },
+    ...(profile.phone
+      ? [
+          {
+            href: `tel:${profile.phone.replace(/[^+\d]/g, "")}`,
+            icon: <PhoneIcon />,
+            text: profile.phone,
+            cta: "Call →",
+          },
+        ]
+      : []),
     {
       href: profile.githubUrl,
       icon: <GithubIcon size={19} />,
@@ -228,22 +239,15 @@ export function ContactPanel({ content }: { content: SiteContent }) {
   );
 }
 
-export function ResumePanel() {
+export function ResumePanel({ cv }: { cv: CvData }) {
   return (
     <div>
       <PanelHeading label="Résumé" title="Grab my CV" />
       <p className="mb-6 -mt-2 max-w-[52ch] text-base leading-[1.7] text-muted">
-        A one-page summary of my experience, skills and selected work — PDF, always kept
-        current.
+        A summary of my experience, skills and selected work — the PDF is built fresh from
+        this site&apos;s content the moment you click, so it&apos;s always current.
       </p>
-      <a
-        href="/cv.pdf"
-        download="Nikoloz Tukhashvili - CV.pdf"
-        className="inline-flex items-center gap-3 rounded-[14px] bg-fg px-6 py-[15px] text-[15px] font-semibold text-paper transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[3px]"
-      >
-        <DownloadIcon size={18} />
-        Download résumé (PDF)
-      </a>
+      <CvDownloadButton cv={cv} />
     </div>
   );
 }

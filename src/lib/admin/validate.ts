@@ -13,6 +13,7 @@ export const SECTION_KEYS = [
   "education",
   "achievements",
   "projects",
+  "cv",
 ] as const;
 
 export type SectionKey = (typeof SECTION_KEYS)[number];
@@ -94,5 +95,44 @@ export function validateSection(key: SectionKey, value: unknown): string | null 
           (row.homepage === undefined || isStr(row.homepage)) &&
           (row.source === "manual" || row.source === "github")
       );
+    case "cv": {
+      if (!isObj(value)) return "cv must be an object.";
+      for (const field of ["fileName", "name", "location"]) {
+        if (!isStr(value[field])) return `cv.${field} must be text.`;
+      }
+      if (!isStrArr(value.contacts)) return "cv.contacts must be a list of text.";
+      if (!Array.isArray(value.sections)) return "cv.sections must be a list.";
+      for (let i = 0; i < value.sections.length; i++) {
+        const section = value.sections[i];
+        if (!isObj(section) || !isStr(section.title))
+          return `cv: section ${i + 1} has a wrong shape.`;
+        if (section.pageBreakBefore !== undefined && typeof section.pageBreakBefore !== "boolean")
+          return `cv: section ${i + 1} pageBreakBefore must be true/false.`;
+        if (
+          section.syncSource !== undefined &&
+          ![
+            "experience",
+            "skills",
+            "projects",
+            "projectsGithub",
+            "achievements",
+            "education",
+          ].includes(section.syncSource as string)
+        )
+          return `cv: section ${i + 1} has an invalid sync source.`;
+        const entriesError = checkRows(
+          section.entries,
+          `cv "${section.title}" entries`,
+          (row) =>
+            isStr(row.title) &&
+            (row.titleUrl === undefined || isStr(row.titleUrl)) &&
+            (row.text === undefined || isStr(row.text)) &&
+            (row.detail === undefined || isStr(row.detail)) &&
+            isStrArr(row.bullets)
+        );
+        if (entriesError) return entriesError;
+      }
+      return null;
+    }
   }
 }

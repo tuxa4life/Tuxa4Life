@@ -117,4 +117,134 @@ export const defaultContent: SiteContent = {
       source: "manual",
     },
   ],
+  cv: {
+    fileName: "Nikoloz Tukhashvili - CV.pdf",
+    name: "Nikoloz Tukhashvili",
+    location: "Rustavi, Kvemo Kartli, Georgia",
+    contacts: [
+      "nikoloztuxa@gmail.com",
+      "+995 599-752-777",
+      "https://github.com/tuxa4life",
+      "https://tuxa.ge/",
+    ],
+    sections: [
+      {
+        title: "Experience",
+        syncSource: "experience",
+        entries: [
+          {
+            title: "Independent / Freelance Developer",
+            detail: "(ongoing)",
+            bullets: [
+              "Building tools for automation, building products for clients, and personal projects.",
+              "Creating professional business web-pages.",
+            ],
+          },
+          {
+            title: "Student / Project Work",
+            detail: "(current)",
+            bullets: [
+              "Coursework and team projects involving complex algorithms, systems design, database management, numerical programming, and robotics prototyping.",
+            ],
+          },
+        ],
+      },
+      {
+        title: "Skills",
+        syncSource: "skills",
+        entries: [
+          {
+            title: "Languages:",
+            text: "JavaScript (ES6+, React), Java, SQL, Python, C#, Kotlin, C++ (Arduino)",
+            bullets: [],
+          },
+          {
+            title: "Web / Backend:",
+            text: "React, Node.js, Socket.IO, Express, Supabase, Cheerio, REST APIs",
+            bullets: [],
+          },
+          {
+            title: "Hardware / Robotics:",
+            text: "Arduino, Raspberry Pi",
+            bullets: [],
+          },
+          {
+            title: "Other:",
+            text: "Adobe Suite, Canva, Figma, Maya, Blender, Unity",
+            bullets: [],
+          },
+        ],
+      },
+      {
+        title: "Projects",
+        syncSource: "projects",
+        entries: [
+          {
+            title: "OpenStreetMap 3D Exporter",
+            detail: "(React, Node.js, Three.js)",
+            bullets: [
+              "A React app that fetches geographic data from OpenStreetMap and generates a 3D map using Three.js based on node information. You can also export the 3D map as a GLTF file.",
+            ],
+          },
+          {
+            title: "KIU Drop",
+            detail: "(React, Supabase, Stripe, Socket.IO)",
+            bullets: [
+              "Student-to-student rental/lending platform for campus items; temporary chat via Socket.IO.",
+            ],
+          },
+          {
+            title: "What? Where? When?",
+            detail: "(React, Node.js, Cheerio, Socket.IO)",
+            bullets: [
+              "Intellectual game based on the classic TV Show “What? Where? When?”. Built with real-time chat with room customization and other multiplayer features.",
+            ],
+          },
+          {
+            title: "Multiplayer Card Game",
+            detail: "(React, Node.js, Socket.IO)",
+            bullets: [
+              "Real-time multiplayer game “Bura” with rooms, turn-based game state sync, custom room management.",
+            ],
+          },
+        ],
+      },
+      {
+        title: "Achievements & Competitions",
+        pageBreakBefore: true,
+        syncSource: "achievements",
+        entries: [
+          { title: "1st Place", text: "— UNICO AI Innovation Laboratory Competition, Rustavi", bullets: [] },
+          { title: "2nd Place", text: "— Georgian WRO LEGO Robotics Championship", bullets: [] },
+          { title: "3rd Place", text: "— Google Developer Group Hackathon", bullets: [] },
+          { title: "Top 3", text: "— GITA Innovations Hackathon", bullets: [] },
+          { title: "", text: "Participated in multiple other national and university-level hackathons", bullets: [] },
+        ],
+      },
+      {
+        title: "Education",
+        syncSource: "education",
+        entries: [
+          {
+            title: "Kutaisi International University",
+            detail: "2023 - Present",
+            bullets: [
+              "tukhashvili.nikoloz@kiu.edu.ge",
+              "Student assistant in the “Fundamentals of Programming” and “Introduction to Informatics” courses.",
+            ],
+          },
+          {
+            title: "IT Step Academy",
+            detail: "2019 - 2021",
+            bullets: ["Winner of the IT Step Hackathon."],
+          },
+          {
+            title: "Rustavi's Gimnazium",
+            detail: "2011 - 2023",
+            bullets: [],
+          },
+        ],
+      },
+    ],
+  },
 };

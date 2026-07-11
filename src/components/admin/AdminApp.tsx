@@ -16,6 +16,7 @@ import {
   ProjectsEditor,
   SkillsEditor,
 } from "@/components/admin/editors";
+import CvEditor from "@/components/admin/CvEditor";
 import StatusPanel from "@/components/admin/StatusPanel";
 import {
   ActivityIcon,
@@ -44,6 +45,7 @@ const SECTIONS: { key: SectionKey; title: string; hint: string; icon: React.Reac
   { key: "education", title: "Education", hint: "Schools & courses", icon: <FileIcon /> },
   { key: "achievements", title: "Achievements", hint: "Places & events", icon: <StarIcon size={19} /> },
   { key: "projects", title: "Projects", hint: "GitHub + fallback", icon: <LayersIcon /> },
+  { key: "cv", title: "CV", hint: "The downloadable PDF", icon: <FileIcon /> },
 ];
 
 export default function AdminApp({
@@ -222,6 +224,14 @@ export default function AdminApp({
                   value={content.projects}
                   onChange={(next) => setSection("projects", next)}
                   githubPreview={githubPreview}
+                />
+              )}
+              {active === "cv" && (
+                <CvEditor
+                  value={content.cv}
+                  siteContent={content}
+                  githubProjects={githubPreview}
+                  onChange={(next) => setSection("cv", next)}
                 />
               )}
             </div>
