@@ -14,6 +14,13 @@ export interface Profile {
   instagramUrl: string;
   websiteUrl: string;
   tagline: string;
+  /**
+   * Public URL of the profile photo. Shown grayscale as the About card's
+   * background and full-colour in the About panel. Uploaded from the admin
+   * to Supabase Storage; optional so pre-existing content rows still validate,
+   * with the UI falling back to the bundled /profile.jpg.
+   */
+  photoUrl?: string;
   aboutParagraphs: string[];
   stats: Stat[];
   /** Skills shown as small chips on the bento card */

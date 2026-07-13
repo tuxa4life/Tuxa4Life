@@ -173,9 +173,20 @@ export default function Site({
       gridClass: "lg:col-start-1 lg:row-start-1",
       panel: <AboutPanel content={content} />,
       body: (
-        <div className="flex h-full flex-col justify-between gap-5 p-5 lg:gap-0">
-          <ChipIcon><UserIcon /></ChipIcon>
-          <CardTitle title="About" subtitle="Who I am" />
+        <div className="relative h-full">
+          {/* Grayscale photo fills the card, inset 2px so the card border shows */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={profile.photoUrl || "/profile.jpg"}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute inset-[2px] h-[calc(100%-4px)] w-[calc(100%-4px)] rounded-[22px] object-cover object-top opacity-90 [filter:grayscale(1)]"
+          />
+          <div className="relative flex h-full flex-col justify-end p-5">
+            <div className="font-display text-lg font-semibold tracking-[-.01em] text-white">
+              About
+            </div>
+          </div>
         </div>
       ),
     },

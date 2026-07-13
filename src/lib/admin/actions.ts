@@ -72,6 +72,63 @@ export async function saveSection(key: SectionKey, value: unknown): Promise<Acti
   return { ok: true };
 }
 
+export interface UploadResult {
+  ok: boolean;
+  url?: string;
+  error?: string;
+}
+
+/** Storage bucket (public) that holds admin-uploaded imagery. */
+const PHOTO_BUCKET = "Pictures";
+
+/**
+ * Uploads a profile photo to Supabase Storage and returns its public URL.
+ * Auth + type/size limits are enforced here since server actions are reachable
+ * by direct POST. The returned URL is stored in profile.photoUrl via the normal
+ * saveSection flow — this action only handles the binary.
+ */
+export async function uploadProfilePhoto(formData: FormData): Promise<UploadResult> {
+  if (!(await isAuthed())) {
+    return { ok: false, error: "Session expired — reload the page and log in again." };
+  }
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, error: "No file received." };
+  }
+  if (!file.type.startsWith("image/")) {
+    return { ok: false, error: "Only image files are allowed." };
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    return { ok: false, error: "Image must be under 5 MB." };
+  }
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) {
+    return {
+      ok: false,
+      error: "SUPABASE_SERVICE_ROLE_KEY is not configured — add it to the server env vars.",
+    };
+  }
+
+  const supabase = createClient(url, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  const ext = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = `profile/${Date.now()}.${ext}`;
+  const { error } = await supabase.storage
+    .from(PHOTO_BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: true });
+  if (error) {
+    return { ok: false, error: `Upload failed: ${error.message}` };
+  }
+
+  const { data } = supabase.storage.from(PHOTO_BUCKET).getPublicUrl(path);
+  return { ok: true, url: data.publicUrl };
+}
+
 export interface EnvStatus {
   /** Env var name(s) the check covers, for display */
   key: string;

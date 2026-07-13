@@ -55,6 +55,8 @@ export function validateSection(key: SectionKey, value: unknown): string | null 
       for (const field of strings) {
         if (!isStr(value[field])) return `profile.${field} must be text.`;
       }
+      if (value.photoUrl !== undefined && !isStr(value.photoUrl))
+        return "profile.photoUrl must be text.";
       if (!isStrArr(value.aboutParagraphs)) return "profile.aboutParagraphs must be a list of text.";
       if (
         !Array.isArray(value.stats) ||

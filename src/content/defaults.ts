@@ -17,6 +17,7 @@ export const defaultContent: SiteContent = {
     websiteUrl: "https://tuxa.ge",
     tagline:
       "I build clean, fast, human interfaces — with care for motion, clarity, and the small details that make a product feel alive.",
+    photoUrl: "/profile.jpg",
     aboutParagraphs: [
       "I'm a software & web developer focused on building clean, fast, human interfaces. I care about motion, clarity, and the small details that make a product feel alive — the kind of experience that feels free and comfortable to move through.",
       "Currently studying at Kutaisi International University and freelancing — building automation tools, business web pages, and products for clients, while always chasing the next idea worth prototyping.",

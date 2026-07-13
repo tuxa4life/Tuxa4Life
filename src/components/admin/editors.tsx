@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import type {
   Achievement,
   EducationItem,
@@ -9,6 +10,7 @@ import type {
   SkillGroup,
   Stat,
 } from "@/lib/types";
+import { uploadProfilePhoto } from "@/lib/admin/actions";
 import {
   ChipsEditor,
   Field,
@@ -22,6 +24,80 @@ function SubHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="font-display mt-7 mb-3 text-base font-semibold tracking-[-.01em]">
       {children}
+    </div>
+  );
+}
+
+/**
+ * Profile photo picker: previews the current image, uploads the chosen file to
+ * Supabase Storage, and stores the returned public URL back into the profile.
+ * The heavy lifting (auth, validation, storage) lives in the server action.
+ */
+function PhotoField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<
+    { kind: "idle" } | { kind: "uploading" } | { kind: "error"; message: string }
+  >({ kind: "idle" });
+
+  const onFile = async (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setStatus({ kind: "error", message: "Choose an image file." });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setStatus({ kind: "error", message: "Image must be under 5 MB." });
+      return;
+    }
+    setStatus({ kind: "uploading" });
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await uploadProfilePhoto(formData);
+    if (result.ok && result.url) {
+      onChange(result.url);
+      setStatus({ kind: "idle" });
+    } else {
+      setStatus({ kind: "error", message: result.error ?? "Upload failed." });
+    }
+  };
+
+  const preview = value || "/profile.jpg";
+
+  return (
+    <div className="flex items-center gap-4">
+      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-[14px] border border-brd2 bg-chip">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={preview} alt="Profile" className="h-full w-full object-cover object-top" />
+      </div>
+      <div className="flex flex-col items-start gap-1.5">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={status.kind === "uploading"}
+          className="cursor-pointer rounded-[9px] border border-brd2 bg-chip px-4 py-2 text-[13px] font-medium text-fg transition-colors duration-300 hover:bg-brd2 disabled:cursor-default disabled:opacity-50"
+        >
+          {status.kind === "uploading" ? "Uploading…" : value ? "Replace photo" : "Upload photo"}
+        </button>
+        <span className="text-[11px] text-muted">
+          JPG or PNG, under 5 MB. Grayscale on the board, full colour in the panel.
+        </span>
+        {status.kind === "error" && (
+          <span className="text-[11px] text-red-500">{status.message}</span>
+        )}
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0])}
+      />
     </div>
   );
 }
@@ -65,6 +141,9 @@ export function ProfileEditor({
           <MarkupTextArea value={value.tagline} rows={2} onChange={(next) => set({ tagline: next })} />
         </Field>
       </div>
+
+      <SubHeading>Photo</SubHeading>
+      <PhotoField value={value.photoUrl ?? ""} onChange={(next) => set({ photoUrl: next })} />
 
       <SubHeading>About paragraphs</SubHeading>
       <ListEditor<string>

@@ -22,9 +22,18 @@ function PanelHeading({ label, title }: { label: string; title: string }) {
 
 export function AboutPanel({ content }: { content: SiteContent }) {
   const { profile } = content;
+  const photo = profile.photoUrl || "/profile.jpg";
   return (
     <div>
       <PanelHeading label="About" title={profile.name} />
+      <div className="mb-7 flex justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photo}
+          alt={profile.name}
+          className="h-44 w-44 rounded-2xl object-cover object-top shadow-sm sm:h-52 sm:w-52"
+        />
+      </div>
       {profile.aboutParagraphs.map((paragraph, i) => (
         <p
           key={i}
