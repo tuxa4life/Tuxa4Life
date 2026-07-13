@@ -86,6 +86,11 @@ export interface CvSection {
   /** Start this section on a new page of the PDF */
   pageBreakBefore?: boolean;
   /**
+   * Render entries as plain paragraphs (bold title + text, no bullet points)
+   * instead of a bulleted list — for prose like a short "About me" or summary.
+   */
+  plain?: boolean;
+  /**
    * When set, the admin's "Sync from site" action rebuilds this section's
    * entries from the matching website content. Unset = fully manual.
    */

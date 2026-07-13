@@ -267,11 +267,18 @@ export default function CvEditor({
               </Field>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <CheckboxField
-                label="Start on a new page"
-                checked={section.pageBreakBefore ?? false}
-                onChange={(next) => updateSection({ pageBreakBefore: next || undefined })}
-              />
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <CheckboxField
+                  label="Start on a new page"
+                  checked={section.pageBreakBefore ?? false}
+                  onChange={(next) => updateSection({ pageBreakBefore: next || undefined })}
+                />
+                <CheckboxField
+                  label="Plain text (no bullet points)"
+                  checked={section.plain ?? false}
+                  onChange={(next) => updateSection({ plain: next || undefined })}
+                />
+              </div>
               {section.syncSource && (
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-muted">

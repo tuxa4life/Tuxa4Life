@@ -110,6 +110,8 @@ export function validateSection(key: SectionKey, value: unknown): string | null 
           return `cv: section ${i + 1} has a wrong shape.`;
         if (section.pageBreakBefore !== undefined && typeof section.pageBreakBefore !== "boolean")
           return `cv: section ${i + 1} pageBreakBefore must be true/false.`;
+        if (section.plain !== undefined && typeof section.plain !== "boolean")
+          return `cv: section ${i + 1} plain must be true/false.`;
         if (
           section.syncSource !== undefined &&
           ![

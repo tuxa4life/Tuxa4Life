@@ -130,6 +130,19 @@ export const defaultContent: SiteContent = {
     ],
     sections: [
       {
+        // `plain` renders the entries as a paragraph (no bullets) — a short
+        // intro blurb under the "About Me" heading. See buildResumeTex.
+        title: "About Me",
+        plain: true,
+        entries: [
+          {
+            title: "",
+            text: "Software & web developer focused on building clean, fast, human interfaces — with care for motion, clarity, and the small details that make a product feel alive. Currently studying at Kutaisi International University and freelancing, building automation tools and products for clients while chasing the next idea worth prototyping.",
+            bullets: [],
+          },
+        ],
+      },
+      {
         title: "Experience",
         syncSource: "experience",
         entries: [

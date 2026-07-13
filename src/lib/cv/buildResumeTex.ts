@@ -84,29 +84,49 @@ function contactTex(contact: string): string {
   return escapeLatex(trimmed);
 }
 
+/** The bold lead of an entry — underlined too when it links somewhere. */
+function titleTex(entry: CvEntry): string {
+  const escaped = escapeLatex(entry.title.trim());
+  // Underline linked titles so it's visible they redirect (hyperref runs
+  // with hidelinks, so links are otherwise indistinguishable from plain text)
+  return entry.titleUrl?.trim()
+    ? `\\textbf{\\href{${escapeUrl(entry.titleUrl)}}{\\underline{${escaped}}}}`
+    : `\\textbf{${escaped}}`;
+}
+
+/** Bullets a nested itemize under an entry, or "" when there are none. */
+function bulletsTex(entry: CvEntry, indent: string): string {
+  const bullets = entry.bullets.map((b) => b.trim()).filter(Boolean);
+  if (bullets.length === 0) return "";
+  return [
+    "",
+    `${indent}\\begin{itemize}`,
+    ...bullets.map((bullet) => `${indent}  \\item ${escapeLatex(bullet)}`),
+    `${indent}\\end{itemize}`,
+  ].join("\n");
+}
+
 function entryTex(entry: CvEntry): string {
   const parts: string[] = [];
-  if (entry.title.trim()) {
-    const escaped = escapeLatex(entry.title.trim());
-    const linked = entry.titleUrl?.trim()
-      ? `\\href{${escapeUrl(entry.titleUrl)}}{${escaped}}`
-      : escaped;
-    parts.push(`\\textbf{${linked}}`);
-  }
+  if (entry.title.trim()) parts.push(titleTex(entry));
   if (entry.text?.trim()) parts.push(escapeLatex(entry.text.trim()));
   let line = `  \\item ${parts.join(" ") || "~"}`;
   if (entry.detail?.trim()) line += ` \\hfill ${escapeLatex(entry.detail.trim())}`;
+  return line + bulletsTex(entry, "    ");
+}
 
-  const bullets = entry.bullets.map((b) => b.trim()).filter(Boolean);
-  if (bullets.length > 0) {
-    line += [
-      "",
-      "    \\begin{itemize}",
-      ...bullets.map((bullet) => `      \\item ${escapeLatex(bullet)}`),
-      "    \\end{itemize}",
-    ].join("\n");
-  }
-  return line;
+/**
+ * A "plain" section skips the bulleted list: each entry is a paragraph with its
+ * bold title (if any) followed by normal text — for prose like a short "About
+ * me" or a summary. Nested bullets, if present, still render under the entry.
+ */
+function plainEntryTex(entry: CvEntry): string {
+  const parts: string[] = [];
+  if (entry.title.trim()) parts.push(titleTex(entry));
+  if (entry.text?.trim()) parts.push(escapeLatex(entry.text.trim()));
+  let line = parts.join(" ") || "~";
+  if (entry.detail?.trim()) line += ` \\hfill ${escapeLatex(entry.detail.trim())}`;
+  return line + bulletsTex(entry, "");
 }
 
 function sectionTex(section: CvSection): string {
@@ -115,9 +135,21 @@ function sectionTex(section: CvSection): string {
   );
   if (entries.length === 0) return "";
 
-  return [
+  const head = [
     ...(section.pageBreakBefore ? ["\\pagebreak", ""] : []),
     `\\section*{${escapeLatex(section.title)}}`,
+  ];
+
+  if (section.plain) {
+    return [
+      ...head,
+      // Blank line between entries = separate paragraphs (parskip is loaded)
+      entries.map(plainEntryTex).join("\n\n"),
+    ].join("\n");
+  }
+
+  return [
+    ...head,
     "\\begin{itemize}",
     ...entries.map(entryTex),
     "\\end{itemize}",
