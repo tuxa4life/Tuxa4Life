@@ -69,14 +69,34 @@ function escapeUrl(url: string): string {
   return url.trim().replace(/([%#&])/g, "\\$1");
 }
 
+/** A web address, with or without a scheme: tuxa.ge, github.com/tuxa4life, https://… */
+const WEB_ADDRESS = /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i;
+
+/**
+ * A scheme-less href is resolved relative to the PDF's own location, so
+ * "github.com/tuxa4life" would open a local path. Always link with a scheme.
+ */
+function withScheme(url: string): string {
+  const trimmed = url.trim();
+  return /^[a-z][\w+.-]*:/i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+/** The scheme is noise on the page, so it's dropped from what's typeset. */
+function urlLabel(url: string): string {
+  return url
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/+$/, "");
+}
+
 /** Render one contact as a clickable link when it looks like one. */
 function contactTex(contact: string): string {
   const trimmed = contact.trim();
-  if (/^https?:\/\//i.test(trimmed)) {
-    return `\\url{${escapeUrl(trimmed)}}`;
-  }
   if (trimmed.includes("@") && !trimmed.includes(" ")) {
     return `\\href{mailto:${trimmed}}{${escapeLatex(trimmed)}}`;
+  }
+  if (WEB_ADDRESS.test(trimmed)) {
+    return `\\href{${escapeUrl(withScheme(trimmed))}}{${escapeLatex(urlLabel(trimmed))}}`;
   }
   if (/^\+?[\d\s().-]{6,}$/.test(trimmed)) {
     return `\\href{tel:${trimmed.replace(/[^+\d]/g, "")}}{${escapeLatex(trimmed)}}`;
@@ -90,7 +110,7 @@ function titleTex(entry: CvEntry): string {
   // Underline linked titles so it's visible they redirect (hyperref runs
   // with hidelinks, so links are otherwise indistinguishable from plain text)
   return entry.titleUrl?.trim()
-    ? `\\textbf{\\href{${escapeUrl(entry.titleUrl)}}{\\underline{${escaped}}}}`
+    ? `\\textbf{\\href{${escapeUrl(withScheme(entry.titleUrl))}}{\\underline{${escaped}}}}`
     : `\\textbf{${escaped}}`;
 }
 
@@ -116,17 +136,25 @@ function entryTex(entry: CvEntry): string {
 }
 
 /**
- * A "plain" section skips the bulleted list: each entry is a paragraph with its
- * bold title (if any) followed by normal text — for prose like a short "About
- * me" or a summary. Nested bullets, if present, still render under the entry.
+ * A "plain" section has no bullet points anywhere: each entry is a paragraph
+ * with its bold title (if any) followed by normal text — for prose like a short
+ * "About me" or a summary. An entry's bullet lines become paragraphs of their
+ * own, so synced content (which always carries bullets) stays bullet-free too.
  */
 function plainEntryTex(entry: CvEntry): string {
   const parts: string[] = [];
   if (entry.title.trim()) parts.push(titleTex(entry));
   if (entry.text?.trim()) parts.push(escapeLatex(entry.text.trim()));
-  let line = parts.join(" ") || "~";
-  if (entry.detail?.trim()) line += ` \\hfill ${escapeLatex(entry.detail.trim())}`;
-  return line + bulletsTex(entry, "");
+
+  let head = parts.join(" ");
+  if (entry.detail?.trim()) {
+    head = `${head || "~"} \\hfill ${escapeLatex(entry.detail.trim())}`;
+  }
+
+  const bullets = entry.bullets.map((b) => b.trim()).filter(Boolean);
+  // Blank line between them = separate paragraphs (parskip is loaded)
+  const paragraphs = [head, ...bullets.map(escapeLatex)].filter(Boolean);
+  return paragraphs.length > 0 ? paragraphs.join("\n\n") : "~";
 }
 
 function sectionTex(section: CvSection): string {
